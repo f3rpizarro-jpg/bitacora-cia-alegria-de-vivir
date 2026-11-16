@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1c4a6b">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="googlebot" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Bitácora de progresión guías</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Plan: pantalla de celular, columna centrada de hasta 440px. Azul celeste profundo para la
+   barra y las cabeceras, celeste claro para el fondo, tarjetas blancas. Verde y ámbar solo para estados. */
+:root{
+  --bg:#eef8fd;
+  --card:#ffffff;
+  --side:#1c4a6b;
+  --accent:#4fb0e3;
+  --accent-2:#2d7aa6;
+  --soft:#dff1fb;
+  --text:#17364d;
+  --muted:#5d7d92;
+  --line:#d6e9f5;
+  --ok:#2e9e74;
+  --ok-soft:#dcf4ea;
+  --warn:#b7791f;
+  --warn-soft:#fbefd6;
+  --bad:#b9483b;
+  --bad-soft:#f8e3e0;
+  --r:18px;
+  font-family:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:linear-gradient(180deg,#cdeafa 0,#eef8fd 320px,#f6fbff 100%);
+  color:var(--text);font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased;
+}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.app{max-width:440px;margin:0 auto;min-height:100vh;padding:0 0 110px;position:relative}
+
+/* Cabecera */
+.top{
+  position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px;
+  padding:16px 18px 18px;color:#fff;border-radius:0 0 26px 26px;
+  background:linear-gradient(135deg,var(--side) 0%,var(--accent-2) 100%);
+  box-shadow:0 8px 22px rgba(28,74,107,.28);
+}
+.logo{width:46px;height:46px;border-radius:50%;background:var(--accent);color:var(--side);display:grid;place-items:center;font-weight:800;font-size:18px;flex-shrink:0;box-shadow:0 0 0 3px rgba(255,255,255,.25)}
+.top strong{display:block;font-size:16px;line-height:1.15}
+.top small{opacity:.85;font-size:12px}
+.top .view-title{margin-left:auto;text-align:right;font-weight:800;font-size:14px;opacity:.95}
+
+/* Vistas */
+.view{display:none;padding:16px 16px 8px;animation:fade .25s ease}
+.view.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h1{font-size:26px;margin:4px 0 4px;font-weight:800;text-wrap:balance}
+.sub{color:var(--muted);margin:0 0 16px;font-size:14px}
+h2{font-size:17px;margin:20px 0 10px;font-weight:800}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:0 2px 10px rgba(23,54,77,.06)}
+.hero{background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);color:#fff;border:0;box-shadow:0 10px 24px rgba(45,122,166,.3)}
+.hero .label{font-size:12px;text-transform:uppercase;letter-spacing:.07em;opacity:.9;font-weight:700}
+.hero .big{font-size:34px;font-weight:800;font-variant-numeric:tabular-nums;margin-top:2px}
+.hero .note{opacity:.92;font-size:13px;margin-top:6px}
+
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 2px 8px rgba(23,54,77,.05)}
+.kpi .label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
+.kpi .value{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;margin-top:2px}
+.kpi .hint{font-size:12px;color:var(--muted)}
+
+/* Botones */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:10px 18px;
+  border:0;border-radius:14px;background:var(--accent);color:var(--side);font-weight:800;cursor:pointer;
+  box-shadow:0 4px 12px rgba(79,176,227,.35);transition:transform .12s ease, box-shadow .2s ease, filter .2s;
+}
+.btn:hover{filter:brightness(1.04);box-shadow:0 6px 16px rgba(79,176,227,.45)}
+.btn:active{transform:scale(.96)}
+.btn.ghost{background:#fff;color:var(--side);border:1px solid var(--line);box-shadow:none}
+.btn.wide{width:100%}
+.btn.small{min-height:36px;padding:6px 12px;font-size:13px;border-radius:12px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.actions .btn{width:100%}
+
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;background:#fff;border:1px solid var(--line);border-radius:16px;padding:4px;margin:0 0 14px;gap:4px}
+.seg button{border:0;background:none;padding:10px 6px;border-radius:12px;font-weight:800;color:var(--muted);cursor:pointer;transition:background .2s,color .2s,transform .12s}
+.seg button:active{transform:scale(.97)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--side);box-shadow:0 3px 8px rgba(79,176,227,.35)}
+
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 12px;margin:0 -2px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;border:1px solid var(--line);background:#fff;padding:8px 14px;border-radius:99px;font-weight:700;color:var(--muted);cursor:pointer;transition:transform .12s,background .2s}
+.chip:active{transform:scale(.95)}
+.chip[aria-pressed="true"]{background:var(--side);color:#fff;border-color:transparent}
+
+.search{width:100%;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(23,54,77,.04)}
+.search:focus{outline:3px solid var(--accent);outline-offset:0;border-color:transparent}
+
+/* Elementos desplegables */
+details.item{background:var(--card);border:1px solid var(--line);border-radius:var(--r);margin-bottom:12px;box-shadow:0 2px 10px rgba(23,54,77,.05);overflow:hidden;transition:box-shadow .2s}
+details.item[open]{box-shadow:0 8px 20px rgba(23,54,77,.10)}
+details.item summary{list-style:none;cursor:pointer;padding:14px 16px;display:flex;align-items:center;gap:12px;-webkit-tap-highlight-color:transparent}
+details.item summary::-webkit-details-marker{display:none}
+details.item summary .txt{flex:1;min-width:0}
+details.item summary .name{font-weight:800;font-size:16px;line-height:1.2;overflow-wrap:anywhere}
+details.item summary .meta{font-size:12px;color:var(--muted);margin-top:2px}
+details.item summary .plus{width:30px;height:30px;border-radius:50%;background:var(--soft);color:var(--side);display:grid;place-items:center;font-weight:800;font-size:18px;flex-shrink:0;transition:transform .25s,background .2s}
+details.item[open] summary .plus{transform:rotate(45deg);background:var(--accent)}
+details.item .body{padding:0 16px 16px;border-top:1px dashed var(--line);animation:fade .25s ease}
+details.item .body p{margin:10px 0 0;font-size:14px}
+
+.pill{display:inline-block;font-size:12px;font-weight:800;padding:4px 10px;border-radius:99px;background:var(--soft);color:var(--side);white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:#17634a}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.off{background:#f1f6f9;color:var(--muted);border:1px solid var(--line)}
+
+.stepper{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0 4px}
+.step{text-align:center;font-size:11px;font-weight:800;padding:8px 2px;border-radius:10px;background:#f4fafd;color:var(--muted);border:1px solid var(--line)}
+.step.done{background:var(--soft);color:var(--side);border-color:transparent}
+.step.current{background:var(--accent);color:var(--side);border-color:transparent;box-shadow:0 3px 8px rgba(79,176,227,.35)}
+
+.rows{display:grid;gap:8px;margin-top:12px;font-size:14px}
+.row{display:flex;justify-content:space-between;gap:10px;align-items:center;border-top:1px dashed var(--line);padding-top:8px}
+.row span:first-child{color:var(--muted)}
+
+.bar{height:10px;background:var(--soft);border-radius:99px;overflow:hidden;margin-top:10px}
+.bar>span{display:block;height:100%;width:0;background:linear-gradient(90deg,#8fd3f4,var(--accent));border-radius:99px;transition:width .7s cubic-bezier(.2,.8,.2,1)}
+.bar.ok>span{background:linear-gradient(90deg,#8fe0c0,var(--ok))}
+
+.line{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px dashed var(--line);font-size:14px}
+.line:first-child{border-top:0}
+.line b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.money-in{color:var(--ok)}
+.money-out{color:var(--bad)}
+.cuota-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 12px;border-radius:12px;background:#f4fafd;font-size:14px;margin-top:6px}
+.cuota-row span:first-child{color:var(--muted);font-weight:700}
+.warn-txt{color:var(--warn);font-weight:800;white-space:nowrap}
+
+.empty{color:var(--muted);text-align:center;padding:28px 16px;border:2px dashed var(--line);border-radius:var(--r);background:#fff}
+.src{font-size:12px;color:var(--muted);margin:14px 2px 0}
+ul.bullets{margin:8px 0 0;padding-left:18px;display:grid;gap:7px;font-size:14px}
+.notes-card{margin-top:14px;background:#fffdf5;border-color:#f5e3b5}
+.notes-card li{color:#5b4a1f}
+
+/* Calendario y ciclo */
+.fases{margin-top:4px}
+.fase-btn{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:14px;padding:11px 13px;margin-bottom:8px;cursor:pointer;color:var(--text);font:inherit;transition:background .2s,border-color .2s,transform .12s}
+.fase-btn b{font-size:14px}
+.fase-btn span{display:block;font-size:13px;color:var(--muted);margin-top:2px;font-weight:600}
+.fase-btn:active{transform:scale(.98)}
+.fase-btn[aria-pressed="true"]{background:var(--soft);border-color:var(--accent)}
+.fld{display:grid;gap:6px;font-size:13px;font-weight:800;color:var(--muted);margin-top:12px}
+.fld textarea,.fld input{background:#f4fafd;border:1px solid var(--line);border-radius:14px;padding:11px 12px;color:var(--text);font-weight:600;width:100%;font-family:inherit}
+.mes{font-size:15px;margin:20px 2px 8px;color:var(--side);font-weight:800}
+.sab{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:8px}
+.sab.con{border-color:var(--accent);box-shadow:0 3px 10px rgba(79,176,227,.15)}
+.sab .dia{width:52px;flex-shrink:0;text-align:center;background:var(--soft);border-radius:12px;padding:6px 0}
+.sab .dia b{display:block;font-size:20px;color:var(--side)}
+.sab .dia span{font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase}
+.sab .det{flex:1;min-width:0;display:grid;gap:10px;font-size:14px;align-content:center;min-height:44px}
+.sab .ev{display:grid;gap:4px;justify-items:start}
+.sab .ev small{color:var(--muted)}
+.sab .muted{color:var(--muted);font-size:13px}
+.sab .add{flex-shrink:0;min-width:40px;min-height:40px;padding:0;font-size:20px;display:grid;place-items:center;border:0;border-radius:12px;background:var(--accent);color:var(--side);font-weight:800;cursor:pointer}
+.link-btn{background:none;border:0;color:var(--side);font-weight:800;cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:3px;font-size:13px}
+.balance{margin-top:16px}
+.balance .line{padding:0 0 2px;border:0;font-size:13px;color:var(--muted)}
+.alerta{margin-top:12px;background:var(--warn-soft);color:#6b4a12;border-radius:14px;padding:10px 12px;font-size:13px;font-weight:700}
+
+/* Barra inferior */
+.tabbar{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(440px,100%);z-index:10;
+  display:grid;grid-template-columns:repeat(6,1fr);gap:2px;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);
+  border-top:1px solid var(--line);padding:6px 8px calc(8px + env(safe-area-inset-bottom));
+  box-shadow:0 -8px 22px rgba(23,54,77,.08);
+}
+.tabbar button{border:0;background:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 2px;border-radius:14px;font-weight:800;font-size:11px;cursor:pointer;transition:transform .15s,background .2s,color .2s}
+.tabbar button .g{font-size:19px;line-height:1}
+.tabbar button:active{transform:scale(.92)}
+.tabbar button[aria-current="page"]{color:var(--side);background:var(--soft)}
+
+/* Botón flotante */
+.fab{
+  position:fixed;bottom:92px;right:max(16px, calc(50% - 204px));z-index:11;width:56px;height:56px;border-radius:50%;
+  border:0;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-size:30px;font-weight:700;cursor:pointer;
+  box-shadow:0 10px 24px rgba(45,122,166,.4);transition:transform .15s;display:grid;place-items:center;line-height:1
+}
+.fab:active{transform:scale(.9)}
+.fab[hidden]{display:none}
+
+/* Hojas emergentes */
+.sheet-back{position:fixed;inset:0;background:rgba(23,54,77,.38);z-index:20;opacity:1;transition:opacity .2s}
+.sheet-back[hidden]{display:none}
+.sheet{
+  position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(440px,100%);max-height:88vh;overflow-y:auto;
+  background:#fff;border-radius:26px 26px 0 0;padding:10px 18px calc(22px + env(safe-area-inset-bottom));z-index:21;
+  box-shadow:0 -12px 30px rgba(23,54,77,.2);animation:up .3s cubic-bezier(.2,.8,.2,1)
+}
+.sheet[hidden]{display:none}
+@keyframes up{from{transform:translate(-50%,40px);opacity:0}to{transform:translate(-50%,0);opacity:1}}
+.grabber{width:44px;height:5px;border-radius:99px;background:var(--line);margin:4px auto 10px}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.sheet-head h2{margin:0;font-size:19px}
+.x{border:0;background:var(--soft);width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;color:var(--side);font-weight:800}
+form.panel{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+form.panel label{display:grid;gap:5px;font-size:13px;font-weight:800;color:var(--muted)}
+form.panel input,form.panel select,form.panel textarea{background:#f4fafd;border:1px solid var(--line);border-radius:14px;padding:11px 12px;color:var(--text);width:100%;font-weight:600}
+form.panel .wide{grid-column:1/-1}
+form.panel .check{display:flex;align-items:center;gap:10px;grid-column:1/-1;font-size:14px;color:var(--text)}
+form.panel .check input{width:22px;height:22px;accent-color:var(--accent)}
+form.panel .actions{grid-column:1/-1}
+
+.toast{position:fixed;left:50%;bottom:160px;transform:translate(-50%,16px);opacity:0;background:var(--side);color:#fff;padding:11px 18px;border-radius:99px;font-weight:800;font-size:14px;transition:opacity .3s,transform .3s;z-index:30;pointer-events:none;white-space:nowrap;box-shadow:0 8px 20px rgba(28,74,107,.3)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media (min-width:441px){ .view{padding-left:20px;padding-right:20px} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <header class="top">
+    <div class="logo">CA</div>
+    <div>
+      <strong>Compañía Alegría de Vivir</strong>
+      <small>Rama Guías · Penonchoique</small>
+    </div>
+    <div class="view-title" id="viewTitle">Inicio</div>
+  </header>
+
+  <!-- INICIO -->
+  <section id="view-inicio" class="view active">
+    <h1>Resumen</h1>
+    <p class="sub">Lo más importante de la compañía, en una mirada</p>
+
+    <div class="card hero">
+      <div class="label">Recaudado en ventas para Jamboree</div>
+      <div class="big" id="heroVentas">$0</div>
+      <div class="note">Feria, empanadas, dulces y globos, y once de guiadoras</div>
+    </div>
+
+    <div class="kpis" id="kpisInicio"></div>
+
+    <div class="actions">
+      <button class="btn" data-go="bitacora">Ver bitácora</button>
+      <button class="btn ghost" data-go="cuotas">Ver cuotas</button>
+      <button class="btn ghost" data-action="manual">Manual</button>
+      <button class="btn ghost" data-action="copiar">Copiar resumen</button>
+    </div>
+    <p class="src">Datos de las planillas JAMBOREE GUIAS y JAMBOREE GUIADORAS, y de la carpeta 01. RENDICIONES 2026.</p>
+  </section>
+
+  <!-- BITÁCORA -->
+  <section id="view-bitacora" class="view">
+    <h1>Bitácora</h1>
+    <p class="sub">Progresión personal de cada guía</p>
+    <input class="search" id="q" type="search" placeholder="Buscar guía…" aria-label="Buscar guía">
+    <div class="chips" id="chipsEtapa" role="group" aria-label="Filtrar por etapa">
+      <button class="chip" data-etapa="" aria-pressed="true">Todas</button>
+      <button class="chip" data-etapa="Alba" aria-pressed="false">Alba</button>
+      <button class="chip" data-etapa="Amanecer" aria-pressed="false">Amanecer</button>
+      <button class="chip" data-etapa="Luz" aria-pressed="false">Luz</button>
+      <button class="chip" data-etapa="Resplandor" aria-pressed="false">Resplandor</button>
+    </div>
+    <div id="guias"></div>
+  </section>
+
+  <!-- ACTIVIDADES FINANCIERAS -->
+  <section id="view-actividades" class="view">
+    <h1>Actividades</h1>
+    <p class="sub">Actividades para juntar fondos para Jamboree</p>
+
+    <div class="card hero" id="heroAct"></div>
+
+    <h2>Ventas de recaudación</h2>
+    <div id="listAct"></div>
+
+    <h2>Gastos de Jamboree</h2>
+    <div class="card" id="gastosJam"></div>
+
+    <p class="src">La rendición de compras no registra las ventas como ingreso, así que el saldo de Jamboree se calcula solo con aportes de cuota y gastos.</p>
+  </section>
+
+  <!-- CALENDARIO -->
+  <section id="view-calendario" class="view">
+    <h1>Calendario</h1>
+    <p class="sub">Sábados, ciclo de programa y énfasis</p>
+
+    <div id="cicloCard"></div>
+
+    <h2>Sábados</h2>
+    <div id="listSabados"></div>
+
+    <h2>Otras fechas del año</h2>
+    <div id="listOtras"></div>
+
+    <p class="src">Fuentes: sección «El ciclo de programa» del Manual Rama Guías y el Plan de Grupo 2027–2029 (calendario anual y consejos de grupo).</p>
+  </section>
+
+  <!-- FONDO DE LA COMPAÑÍA -->
+  <section id="view-fondo" class="view">
+    <h1>Fondo de la compañía</h1>
+    <p class="sub">Fondo de la compañía y de las guías, en un solo fondo</p>
+
+    <div class="card hero" id="heroFondo"></div>
+
+    <div class="seg" role="group" aria-label="Ver ingresos o gastos" id="segFondo">
+      <button data-fondo="ingresos" aria-pressed="true">Ingresos</button>
+      <button data-fondo="gastos" aria-pressed="false">Gastos</button>
+    </div>
+    <div class="card" id="listFondo"></div>
+
+    <p class="src">Según la rendición de compras 2026. El campamento de invierno se cobra a las guías.</p>
+  </section>
+
+  <!-- CUOTAS -->
+  <section id="view-cuotas" class="view">
+    <h1>Cuotas Jamboree</h1>
+    <p class="sub">Pagos pendientes por guía y por guiadora</p>
+
+    <div class="seg" role="group" aria-label="Guías o guiadoras" id="segCuotas">
+      <button data-cuotas="guias" aria-pressed="true">Guías</button>
+      <button data-cuotas="guiadoras" aria-pressed="false">Guiadoras</button>
+    </div>
+    <div class="kpis" id="kpisCuotas"></div>
+    <div id="listCuotas"></div>
+
+    <div class="card notes-card">
+      <h2 style="margin-top:0">Para revisar en la planilla</h2>
+      <ul class="bullets" id="notasCuotas"></ul>
+    </div>
+  </section>
+
+</div>
+
+<nav class="tabbar" aria-label="Principal">
+  <button data-go="inicio" aria-current="page"><span class="g">⌂</span>Inicio</button>
+  <button data-go="bitacora"><span class="g">✎</span>Bitácora</button>
+  <button data-go="actividades"><span class="g">◈</span>Actividades</button>
+  <button data-go="calendario"><span class="g">▦</span>Calendario</button>
+  <button data-go="fondo"><span class="g">$</span>Fondo</button>
+  <button data-go="cuotas"><span class="g">≡</span>Cuotas</button>
+</nav>
+
+<button class="fab" id="fab" aria-label="Agregar guía" hidden>+</button>
+
+<div class="sheet-back" id="sheetBack" hidden></div>
+
+<div class="sheet" id="sheetForm" role="dialog" aria-modal="true" aria-labelledby="formTitle" hidden>
+  <div class="grabber"></div>
+  <div class="sheet-head">
+    <h2 id="formTitle">Nueva guía</h2>
+    <button class="x" data-close aria-label="Cerrar">×</button>
+  </div>
+  <form class="panel" id="form">
+    <label class="wide">Nombre<input name="nombre" required></label>
+    <label>Edad<input name="edad" type="number" min="11" max="15"></label>
+    <label>Etapa
+      <select name="etapa">
+        <option>Alba</option><option>Amanecer</option><option>Luz</option><option>Resplandor</option>
+      </select>
+    </label>
+    <label class="check"><input type="checkbox" name="promesa"> Hizo su Promesa Guía</label>
+    <label>Especialidad<input name="tema" placeholder="Ej. Primeros auxilios"></label>
+    <label>Estado
+      <select name="estado">
+        <option value="sin iniciar">Sin iniciar</option>
+        <option value="en curso">En curso</option>
+        <option value="lograda">Lograda</option>
+      </select>
+    </label>
+    <label>Monitora<input name="monitora" placeholder="Quién la apoya"></label>
+    <label>Inicio<input name="inicio" type="date"></label>
+    <label class="wide">Próximo paso o nota<textarea name="nota" rows="2"></textarea></label>
+    <input type="hidden" name="id">
+    <div class="actions">
+      <button type="button" class="btn ghost" data-close>Cancelar</button>
+      <button type="submit" class="btn">Guardar</button>
+    </div>
+  </form>
+</div>
+
+<div class="sheet" id="sheetManual" role="dialog" aria-modal="true" aria-labelledby="manualTitle" hidden>
+  <div class="grabber"></div>
+  <div class="sheet-head">
+    <h2 id="manualTitle">Manual de progresión</h2>
+    <button class="x" data-close aria-label="Cerrar">×</button>
+  </div>
+  <div class="card" style="box-shadow:none">
+    <h2 style="margin-top:0">Las cuatro etapas</h2>
+    <ul class="bullets">
+      <li><b>Alba</b> (11 a 13 años): inicio de la progresión. La guía se reconoce en su nueva familia y conoce el sistema de objetivos.</li>
+      <li><b>Amanecer</b> (11 a 13 años): se entrega cuando logra aproximadamente la mitad de los objetivos de 11 a 13.</li>
+      <li><b>Luz</b> (13 a 15 años): logra la totalidad o casi la totalidad de los de 11 a 13 y explora los de 13 a 15.</li>
+      <li><b>Resplandor</b> (13 a 15 años): se entrega al lograr aproximadamente la mitad de los objetivos de 13 a 15.</li>
+    </ul>
+    <h2>Especialidades</h2>
+    <ul class="bullets">
+      <li>Son voluntarias e individuales, y se hacen en paralelo al calendario.</li>
+      <li>Duran entre 2 y 6 meses, según el tema.</li>
+      <li>Una monitora apoya a la guía.</li>
+    </ul>
+    <h2>Seguimiento y Promesa</h2>
+    <ul class="bullets">
+      <li>Cada guiadora acompaña a un máximo de 8 guías, por lo menos durante un año.</li>
+      <li>La Promesa Guía no depende de las etapas.</li>
+      <li>Al pasar de Amanecer a Luz cambia el Diario de los Desafíos.</li>
+    </ul>
+    <p class="src">Fuente: Manual Rama Guías, AGSCh (capítulos 10, 11 y 12).</p>
+  </div>
+</div>
+
+<div class="sheet" id="sheetAct" role="dialog" aria-modal="true" aria-labelledby="actTitle" hidden>
+  <div class="grabber"></div>
+  <div class="sheet-head">
+    <h2 id="actTitle">Actividad</h2>
+    <button class="x" data-close aria-label="Cerrar">×</button>
+  </div>
+  <form class="panel" id="formAct">
+    <input type="hidden" name="fecha">
+    <label class="wide">Nombre de la actividad<input name="titulo" required></label>
+    <label>Ámbito
+      <select name="ambito"><option>Patrulla</option><option>Compañía</option><option>Grupo</option></select>
+    </label>
+    <label>Tipo
+      <select name="tipo"><option>Fija</option><option>Variable</option></select>
+    </label>
+    <label class="wide">Área de desarrollo<input name="area" placeholder="Qué área trabaja la actividad"></label>
+    <div class="actions">
+      <button type="button" class="btn ghost" data-close>Cancelar</button>
+      <button type="submit" class="btn">Agregar</button>
+    </div>
+  </form>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const ETAPAS = ["Alba","Amanecer","Luz","Resplandor"];
+const DIARIO = {Alba:"Diario 11–13", Amanecer:"Diario 11–13", Luz:"Diario 13–15", Resplandor:"Diario 13–15"};
+const KEY = "bitacora-guias-v2";
+
+// Guías de la compañía (fuente: JAMBOREE GUIAS). Pendiente: edad, etapa, Promesa y especialidad.
+const EJEMPLOS = [
+  "Julieta Sarai Leon Quintero",
+  "Catalina Isabella Chandia Riquelme",
+  "Antonella Avila Cerna",
+  "Antonella Scarlett Flores Agüero",
+  "Elena Violeta González Olivares",
+  "Antonella Anaís Parra Pávez",
+  "Paula Carolina Sandoval Sepulveda",
+  "Constanza Isidora Reyes Flores",
+  "Pascal Aylen Vilches Asmurú",
+  "Amalia Colil Vergara",
+  "Amanda Trinidad Urbina Valencia",
+  "Antonella Trinidad Canales Canales",
+  "Pilar Belén Estay Orellana",
+  "Daniela Francisca Bustillos Jara",
+  "Lissette Sanchez"
+].map((nombre,i)=>({id:"g"+String(i+1).padStart(2,"0"), nombre, edad:null, etapa:"", promesa:null, tema:"", estado:"", monitora:"", inicio:"", nota:""}));
+
+// Registro scout activo
+const REG_SCOUT = [
+  "Catalina Isabella Chandia Riquelme",
+  "Elena Violeta González Olivares",
+  "Antonella Scarlett Flores Agüero",
+  "Paula Carolina Sandoval Sepulveda",
+  "Amanda Trinidad Urbina Valencia",
+  "Antonella Trinidad Canales Canales",
+  "Daniela Francisca Bustillos Jara"
+];
+
+// Cuotas pendientes por guía (pesos). 0 = pagado. Orden: cuotas 1 a 5 y alimentación y transporte.
+const CUOTAS_GUIA = [
+  {n:"Cuota 1", m:20000}, {n:"Cuota 2", m:30000}, {n:"Cuota 3", m:30000},
+  {n:"Cuota 4", m:25000}, {n:"Cuota 5", m:24500}, {n:"Alimentación y transporte", m:35000}
+];
+const FIN_GUIAS = {
+  "Julieta Sarai Leon Quintero":        [0,0,0,0,24500,35000],
+  "Catalina Isabella Chandia Riquelme": [0,0,0,0,24500,35000],
+  "Antonella Avila Cerna":              [20000,30000,30000,25000,24500,35000],
+  "Antonella Scarlett Flores Agüero":   [0,30000,30000,25000,24500,35000],
+  "Elena Violeta González Olivares":    [0,0,0,0,19500,35000],
+  "Antonella Anaís Parra Pávez":        [0,0,0,0,24500,35000],
+  "Paula Carolina Sandoval Sepulveda":  [0,0,0,0,24500,35000],
+  "Constanza Isidora Reyes Flores":     [0,0,0,0,19584,35000],
+  "Pascal Aylen Vilches Asmurú":        [0,0,0,0,23468,35000],
+  "Amalia Colil Vergara":               [0,0,0,0,5488,35000],
+  "Amanda Trinidad Urbina Valencia":    [0,0,0,0,24500,35000],
+  "Antonella Trinidad Canales Canales": [0,0,0,0,0,26098],
+  "Pilar Belén Estay Orellana":         [0,0,0,0,24499,35000],
+  "Daniela Francisca Bustillos Jara":   [0,0,0,0,24500,35000],
+  "Lissette Sanchez":                   [20000,20159,30000,25000,24500,24500]
+};
+
+// Guiadoras (fuente: JAMBOREE GUIADORAS). null = sin registro en la planilla.
+const CUOTAS_GUIADORA = [
+  {n:"Cuota 1", m:50000}, {n:"Cuota 2", m:30000}, {n:"Cuota 3", m:30000}, {n:"Cuota 4", m:25000}
+];
+const FIN_GUIADORAS = [
+  {nombre:"Fernanda Pizarro", p:[0,17009,30000,14020], nota:"No va a Jamboree (según planilla)"},
+  {nombre:"Macarena Sánchez", p:[0,0,30000,14020], nota:""},
+  {nombre:"Sirone Gálvez", p:[0,0,30000,14020], nota:""},
+  {nombre:"Camila Castro", p:[null,17009,17009,1029], nota:"Cuota 1 sin estado claro (total 30.000). Pagó $12.992 a Tropa, que queda para la próxima cuota."},
+  {nombre:"Tirza Hermosilla", p:[null,20159,30000,14020], nota:"No va a Jamboree (según planilla). Sin registro de cuota 1."}
+];
+
+const NOTAS_CUOTAS = [
+  "Lissette aparece como «Lissette Sanchez» y «Lissete Sanchez» en la planilla de guías. Se usó la primera forma.",
+  "En la planilla de guías, la alimentación y transporte de Lissette figura con $24.500, no con $35.000.",
+  "Camila Castro figura con total $30.000 en la cuota 1, sin estado de pago. Conviene confirmarlo con la tesorera.",
+  "Tirza Hermosilla no aparece en la cuota 1 de la planilla de guiadoras.",
+  "Antonella Trinidad Canales tiene un saldo a favor de $8.902 en la cuota 5, que se aplica a su pendiente de alimentación."
+];
+
+// Actividades de recaudación para Jamboree (carpeta 01. RENDICIONES 2026)
+const ACTIVIDADES = [
+  {nombre:"Venta de ropa (feria)", fecha:"16/05", recaudado:21178, detalle:"Ventas por $19.400 y $1.778 en donaciones. Participación de $4.229 por guiadora."},
+  {nombre:"Venta de empanadas", fecha:"06/06", recaudado:137000, detalle:"Efectivo $95.000 y transferencias $42.000. Participación de $9.786 para 14 integrantes."},
+  {nombre:"Venta de dulces y globos", fecha:"01/08", recaudado:167300, detalle:"Efectivo $31.000, transferencias $91.300 y globos $45.000. Donación de $9.841 por integrante, más $20.000 adicionales."},
+  {nombre:"Venta de once (guiadoras)", fecha:"02/07", recaudado:30000, detalle:"Once y chocolate. Cuenta de Fer $12.000 y de Maca $18.000."}
+];
+
+// Aportes de cuota para Jamboree (rendición 2026)
+const APORTES_JAMBOREE = [
+  {n:"Aporte cuota $10.000 (act. financiera)", m:150000},
+  {n:"Aporte cuota $5.000 (act. financiera dulces)", m:20000}
+];
+
+// Gastos de actividades de Jamboree (rendición 2026)
+const GASTOS_JAMBOREE = [
+  {n:"Compra insumos (sopaipillas y empanadas)", m:41500},
+  {n:"Bebida", m:3200},
+  {n:"Azúcar y té", m:4890},
+  {n:"Café", m:5090},
+  {n:"Pago cocina 06-06", m:8000},
+  {n:"Plátanos", m:4000},
+  {n:"Frutillas", m:9000},
+  {n:"Platos, tenedor y cuchillos", m:9455},
+  {n:"Supermercado", m:32100},
+  {n:"Pago cocina 20-06", m:8000},
+  {n:"Globos y varillas (venta 01/08)", m:8480},
+  {n:"Insumos (venta 01/08)", m:1470},
+  {n:"Limpia pipas (venta 03/09)", m:5950}
+];
+
+// Fondo de la compañía (incluye el fondo de las guías)
+const FONDO_INGRESOS = [
+  {n:"Venta de insignias", m:16000},
+  {n:"Ingreso año 2025", m:42198},
+  {n:"Saldo poleras", m:5000}
+];
+const FONDO_GASTOS = [
+  {n:"Tarjetas", m:2500},
+  {n:"Bolsa celeste", m:500},
+  {n:"Compra de insignias", m:20000},
+  {n:"Campamento de invierno (se cobra a las guías)", m:44357}
+];
+
+/* ---------- Utilidades ---------- */
+const esc = s => String(s??"").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = n => "$" + String(Math.abs(Math.round(n))).replace(/\B(?=(\d{3})+(?!\d))/g,".");
+const sg = n => (n<0 ? "−" : "") + fmt(n);
+const suma = arr => arr.reduce((a,b)=>a+b.m,0);
+
+let guias = cargar();
+let filtroEtapa = "";
+let filtroFondo = "ingresos";
+let modoCuotas = "guias";
+
+function cargar(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return EJEMPLOS.map(x=>({...x}));
+}
+function guardar(){
+  try{ localStorage.setItem(KEY, JSON.stringify(guias)); }catch(e){}
+}
+
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(()=>t.classList.remove("show"), 2200);
+}
+
+function celdaCuota(p){
+  if(p===null || p===undefined) return '<span class="pill off">Sin registro</span>';
+  if(p===0) return '<span class="pill ok">Pagado</span>';
+  return `<span class="warn-txt">Falta ${fmt(p)}</span>`;
+}
+
+/* ---------- Inicio ---------- */
+function totales(){
+  const ventas = ACTIVIDADES.reduce((a,b)=>a+b.recaudado,0);
+  const fondo = suma(FONDO_INGRESOS) - suma(FONDO_GASTOS);
+  const aportes = suma(APORTES_JAMBOREE);
+  const gastosJam = suma(GASTOS_JAMBOREE);
+  const pendGuias = Object.values(FIN_GUIAS).reduce((a,p)=>a+p.reduce((x,y)=>x+y,0),0);
+  return {ventas, fondo, aportes, gastosJam, pendGuias};
+}
+
+function renderInicio(){
+  const t = totales();
+  document.getElementById("heroVentas").textContent = fmt(t.ventas);
+  document.getElementById("kpisInicio").innerHTML = `
+    <div class="kpi"><div class="label">Guías</div><div class="value">${guias.length}</div><div class="hint">en la bitácora</div></div>
+    <div class="kpi"><div class="label">Fondo compañía</div><div class="value ${t.fondo<0?"money-out":"money-in"}">${sg(t.fondo)}</div><div class="hint">ingresos menos gastos</div></div>
+    <div class="kpi"><div class="label">Aportes de cuota</div><div class="value">${fmt(t.aportes)}</div><div class="hint">para Jamboree</div></div>
+    <div class="kpi"><div class="label">Pendiente guías</div><div class="value">${fmt(t.pendGuias)}</div><div class="hint">cuotas y alimentación</div></div>`;
+}
+
+/* ---------- Bitácora ---------- */
+function renderBitacora(){
+  const q = document.getElementById("q").value.trim().toLowerCase();
+  const lista = guias.filter(g=>
+    (!q || g.nombre.toLowerCase().includes(q)) && (!filtroEtapa || g.etapa===filtroEtapa));
+  const cont = document.getElementById("guias");
+  if(!lista.length){
+    cont.innerHTML = '<div class="empty">No hay guías con ese filtro.</div>';
+    return;
+  }
+  cont.innerHTML = lista.map(g=>{
+    const idx = ETAPAS.indexOf(g.etapa);
+    const steps = ETAPAS.map((n,i)=>{
+      const cls = i<idx ? "done" : i===idx ? "current" : "";
+      return `<div class="step ${cls}">${n}</div>`;
+    }).join("");
+    const reg = REG_SCOUT.includes(g.nombre)
+      ? '<span class="pill ok">Reg. scout</span>'
+      : '<span class="pill off">Por confirmar</span>';
+    const estado = !g.estado ? '<span class="pill off">Por completar</span>'
+      : g.estado==="lograda" ? '<span class="pill ok">Lograda</span>'
+      : g.estado==="en curso" ? '<span class="pill warn">En curso</span>'
+      : '<span class="pill off">Sin iniciar</span>';
+    const promesa = g.promesa===true ? '<span class="pill ok">Hecha</span>' : g.promesa===false ? '<span class="pill off">Pendiente</span>' : '<span class="pill off">Por completar</span>';
+    const tema = g.tema ? esc(g.tema) : "Sin especialidad";
+    const inicio = g.inicio ? ` · desde ${esc(g.inicio)}` : "";
+    return `
+    <details class="item">
+      <summary>
+        <div class="txt">
+          <div class="name">${esc(g.nombre)}</div>
+          <div class="meta">${g.etapa ? esc(g.etapa) : "Etapa por completar"} · ${g.edad ? esc(g.edad)+" años" : "edad por completar"}</div>
+        </div>
+        <span class="plus" aria-hidden="true">+</span>
+      </summary>
+      <div class="body">
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px">${reg} ${estado}</div>
+        <div class="stepper" aria-label="Etapa ${esc(g.etapa) || "por completar"}">${steps}</div>
+        <div class="rows">
+          <div class="row"><span>Diario</span><b>${DIARIO[g.etapa] || "Por completar"}</b></div>
+          <div class="row"><span>Promesa Guía</span>${promesa}</div>
+          <div class="row"><span>Especialidad</span><span>${tema}${inicio}</span></div>
+          <div class="row"><span>Monitora</span><span>${esc(g.monitora) || "—"}</span></div>
+        </div>
+        ${g.nota ? `<p>${esc(g.nota)}</p>` : ""}
+        <div class="actions" style="grid-template-columns:1fr">
+          <button class="btn ghost small" data-edit="${g.id}">Editar esta guía</button>
+        </div>
+      </div>
+    </details>`;
+  }).join("");
+}
+
+/* ---------- Actividades ---------- */
+function renderActividades(){
+  const total = ACTIVIDADES.reduce((a,b)=>a+b.recaudado,0);
+  const saldoJam = suma(APORTES_JAMBOREE) - suma(GASTOS_JAMBOREE);
+  document.getElementById("heroAct").innerHTML = `
+    <div class="label">Total recaudado en ventas</div>
+    <div class="big">${fmt(total)}</div>
+    <div class="note">${ACTIVIDADES.length} actividades para Jamboree</div>
+    <div class="line" style="border-color:rgba(255,255,255,.3);color:#fff"><span>Aportes de cuota</span><b>${fmt(suma(APORTES_JAMBOREE))}</b></div>
+    <div class="line" style="border-color:rgba(255,255,255,.3);color:#fff"><span>Gastos rendidos</span><b>${sg(-suma(GASTOS_JAMBOREE))}</b></div>
+    <div class="line" style="border-color:rgba(255,255,255,.3);color:#fff"><span>Saldo según rendición</span><b>${sg(saldoJam)}</b></div>`;
+
+  document.getElementById("listAct").innerHTML = ACTIVIDADES.map(a=>{
+    const pct = Math.round(a.recaudado*100/total);
+    return `
+    <details class="item">
+      <summary>
+        <div class="txt">
+          <div class="name">${esc(a.nombre)}</div>
+          <div class="meta">${esc(a.fecha)} · ${pct}% del total</div>
+          <div class="bar"><span data-w="${pct}"></span></div>
+        </div>
+        <b style="font-variant-numeric:tabular-nums;white-space:nowrap">${fmt(a.recaudado)}</b>
+      </summary>
+      <div class="body"><p>${esc(a.detalle)}</p></div>
+    </details>`;
+  }).join("");
+
+  document.getElementById("gastosJam").innerHTML = `
+    ${GASTOS_JAMBOREE.map(g=>`<div class="line"><span>${esc(g.n)}</span><b class="money-out">${sg(-g.m)}</b></div>`).join("")}
+    <div class="line"><span><b>Total gastado</b></span><b class="money-out">${sg(-suma(GASTOS_JAMBOREE))}</b></div>`;
+
+  // Animar las barras al mostrar la hoja
+  requestAnimationFrame(()=>{
+    document.querySelectorAll("#listAct .bar span").forEach(s=>{ s.style.width = s.dataset.w + "%"; });
+  });
+}
+
+/* ---------- Fondo de la compañía ---------- */
+function renderFondo(){
+  const ing = suma(FONDO_INGRESOS), gas = suma(FONDO_GASTOS), saldo = ing - gas;
+  document.getElementById("heroFondo").innerHTML = `
+    <div class="label">Saldo del fondo de la compañía</div>
+    <div class="big">${sg(saldo)}</div>
+    <div class="note">Ingresos ${fmt(ing)} · Gastos ${fmt(gas)}</div>`;
+
+  const items = filtroFondo==="ingresos" ? FONDO_INGRESOS : FONDO_GASTOS;
+  const signo = filtroFondo==="ingresos" ? "money-in" : "money-out";
+  const total = suma(items);
+  document.getElementById("listFondo").innerHTML = `
+    ${items.map(i=>`<div class="line"><span>${esc(i.n)}</span><b class="${signo}">${filtroFondo==="ingresos"?"+":"−"}${fmt(i.m)}</b></div>`).join("")}
+    <div class="line"><span><b>Total ${filtroFondo}</b></span><b class="${signo}">${fmt(total)}</b></div>`;
+
+  document.querySelectorAll("#segFondo button").forEach(b=>b.setAttribute("aria-pressed", String(b.dataset.fondo===filtroFondo)));
+}
+
+/* ---------- Cuotas ---------- */
+function renderCuotas(){
+  document.querySelectorAll("#segCuotas button").forEach(b=>b.setAttribute("aria-pressed", String(b.dataset.cuotas===modoCuotas)));
+  const listCont = document.getElementById("listCuotas");
+  const kpis = document.getElementById("kpisCuotas");
+
+  if(modoCuotas==="guias"){
+    const filas = guias.map(g=>({nombre:g.nombre, p:FIN_GUIAS[g.nombre] || null}));
+    const pend = filas.reduce((a,f)=>a+(f.p ? f.p.reduce((x,y)=>x+y,0) : 0),0);
+    const alDia = filas.filter(f=>f.p && f.p.slice(0,5).every(x=>x===0)).length;
+    kpis.innerHTML = `
+      <div class="kpi"><div class="label">Pendiente</div><div class="value">${fmt(pend)}</div><div class="hint">guías</div></div>
+      <div class="kpi"><div class="label">Al día</div><div class="value">${alDia}</div><div class="hint">en cuotas 1 a 5</div></div>`;
+    listCont.innerHTML = filas.map(f=>{
+      const pagadas = f.p ? f.p.filter(x=>x===0).length : 0;
+      const total = CUOTAS_GUIA.length;
+      const pct = Math.round(pagadas*100/total);
+      const chips = f.p
+        ? CUOTAS_GUIA.map((c,i)=>`<div class="cuota-row"><span>${c.n} · ${fmt(c.m)}</span>${celdaCuota(f.p[i])}</div>`).join("")
+        : '<div class="empty" style="margin-top:8px">Sin registro en la planilla</div>';
+      return `
+      <details class="item">
+        <summary>
+          <div class="txt">
+            <div class="name">${esc(f.nombre)}</div>
+            <div class="meta">${f.p ? pagadas+" de "+total+" pagadas" : "Sin registro"}</div>
+            ${f.p ? `<div class="bar ${pct===100?"ok":""}"><span data-w="${pct}"></span></div>` : ""}
+          </div>
+          <span class="plus" aria-hidden="true">+</span>
+        </summary>
+        <div class="body">${chips}</div>
+      </details>`;
+    }).join("");
+    document.getElementById("notasCuotas").innerHTML = NOTAS_CUOTAS.map(n=>`<li>${esc(n)}</li>`).join("");
+  } else {
+    const pend = FIN_GUIADORAS.reduce((a,f)=>a+f.p.reduce((x,y)=>x+(y||0),0),0);
+    const alDia = FIN_GUIADORAS.filter(f=>f.p.every(x=>x===0)).length;
+    kpis.innerHTML = `
+      <div class="kpi"><div class="label">Pendiente</div><div class="value">${fmt(pend)}</div><div class="hint">guiadoras, cuotas 1 a 4</div></div>
+      <div class="kpi"><div class="label">Al día</div><div class="value">${alDia}</div><div class="hint">de ${FIN_GUIADORAS.length} guiadoras</div></div>`;
+    listCont.innerHTML = FIN_GUIADORAS.map(f=>{
+      const chips = CUOTAS_GUIADORA.map((c,i)=>`<div class="cuota-row"><span>${c.n} · ${fmt(c.m)}</span>${celdaCuota(f.p[i])}</div>`).join("");
+      const nota = f.nota ? `<p style="font-size:13px;color:var(--muted)">${esc(f.nota)}</p>` : "";
+      return `
+      <details class="item">
+        <summary>
+          <div class="txt"><div class="name">${esc(f.nombre)}</div><div class="meta">${f.p.filter(x=>x===0).length} de ${f.p.length} pagadas</div></div>
+          <span class="plus" aria-hidden="true">+</span>
+        </summary>
+        <div class="body">${chips}${nota}</div>
+      </details>`;
+    }).join("");
+    document.getElementById("notasCuotas").innerHTML = "";
+  }
+
+  requestAnimationFrame(()=>{
+    listCont.querySelectorAll(".bar span").forEach(s=>{ s.style.width = s.dataset.w + "%"; });
+  });
+}
+
+/* ---------- Calendario y ciclo de programa ---------- */
+// Fechas fijas conocidas (Plan de Grupo y family day). Son editables.
+const CALENDARIO_SEED = [
+  {id:"s1", fecha:"2026-12-19", titulo:"Family day de Navidad (Piscina Plaza México, 12:00 a 19:00)", ambito:"Grupo", tipo:"Fija", area:""},
+  {id:"s2", fecha:"2027-03-06", titulo:"Plan de Grupo, sábado 1", ambito:"Grupo", tipo:"Fija", area:""},
+  {id:"s3", fecha:"2027-03-13", titulo:"Plan de Grupo, sábado 2", ambito:"Grupo", tipo:"Fija", area:""}
+];
+// Fechas del año que no caen en sábado o no tienen día fijo
+const OTRAS = [
+  "Ene–feb 2027 · Campamento de verano (requisito: 50% de asistencia)",
+  "7 mar 2027 · Aniversario de la Compañía",
+  "26–28 mar 2027 · Semana Santa en la parroquia",
+  "Abr 2027 · Fogón de inicio (un representante por unidad)",
+  "Jun–jul 2027 · Campamento de invierno por rango de edad",
+  "15 ago 2027 · Aniversario del grupo",
+  "Sep 2027 · Fiestas patrias",
+  "Jul y dic 2027 · Reunión semestral de equipos con evaluación"
+];
+// Fases del ciclo de programa (manual)
+const FASES = [
+  {n:"1. Diagnóstico y énfasis", d:"Se revisa lo logrado y se fija el énfasis del ciclo que empieza."},
+  {n:"2. Selección de actividades", d:"Las patrullas proponen actividades dentro del énfasis."},
+  {n:"3. Calendario y desarrollo", d:"El Consejo organiza el calendario, lo aprueba la Asamblea y se ejecuta. Es la fase más larga."},
+  {n:"4. Cambio de ciclo", d:"Se evalúa el ciclo que termina y se fija el énfasis del siguiente."}
+];
+const MESES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+
+function cargarCal(){
+  try{ const r = localStorage.getItem("calendario-v1"); if(r) return JSON.parse(r); }catch(e){}
+  return CALENDARIO_SEED.map(x=>({...x}));
+}
+function guardarCal(){ try{ localStorage.setItem("calendario-v1", JSON.stringify(calEventos)); }catch(e){} }
+function cargarCiclo(){
+  try{ const r = localStorage.getItem("ciclo-v1"); if(r) return JSON.parse(r); }catch(e){}
+  return {diagnostico:"", enfasis:"", inicio:"", fase:0};
+}
+function guardarCiclo(){ try{ localStorage.setItem("ciclo-v1", JSON.stringify(ciclo)); }catch(e){} }
+
+let calEventos = cargarCal();
+let ciclo = cargarCiclo();
+
+function toIso(d){ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function partes(s){ return s.split("-").map(Number); }
+function sabados(){
+  const out = []; let d = new Date(2026,10,21); const fin = new Date(2027,11,25);
+  while(d<=fin){ out.push(toIso(d)); d = new Date(d.getFullYear(), d.getMonth(), d.getDate()+7); }
+  return out;
+}
+function fechaLarga(s){ const [y,m,d] = partes(s); return d+" de "+MESES[m-1]+" de "+y; }
+function mesAnio(s){ const [y,m] = partes(s); const t = MESES[m-1]; return t.charAt(0).toUpperCase()+t.slice(1)+" "+y; }
+function sumarMeses(s,n){ const [y,m,d] = partes(s); return toIso(new Date(y, m-1+n, d)); }
+// Consejo de Grupo: segundo sábado del mes (días 8 a 14)
+function esConsejo(s){ const d = partes(s)[2]; return d>=8 && d<=14; }
+
+function renderCalendario(){
+  const fases = FASES.map((f,i)=>`<button class="fase-btn" data-fase="${i}" aria-pressed="${ciclo.fase===i}"><b>${esc(f.n)}</b><span>${esc(f.d)}</span></button>`).join("");
+  document.getElementById("cicloCard").innerHTML = `
+    <div class="card">
+      <h2 style="margin-top:0">Ciclo de programa</h2>
+      <p class="sub" style="margin-bottom:12px">Cada ciclo dura entre 3 y 4 meses. En un año hay alrededor de 3 ciclos.</p>
+      <div class="fases">${fases}</div>
+      <label class="fld">Diagnóstico de la compañía<textarea data-ciclo="diagnostico" rows="3">${esc(ciclo.diagnostico)}</textarea></label>
+      <label class="fld">Énfasis del ciclo<textarea data-ciclo="enfasis" rows="2">${esc(ciclo.enfasis)}</textarea></label>
+      <label class="fld">Inicio del ciclo<input type="date" data-ciclo="inicio" value="${esc(ciclo.inicio)}"></label>
+      <div id="balanceCiclo"></div>
+    </div>`;
+  renderBalance();
+  renderSabados();
+  document.getElementById("listOtras").innerHTML = `<div class="card">${OTRAS.map(o=>`<div class="line"><span>${esc(o)}</span></div>`).join("")}</div>`;
+}
+
+function renderBalance(){
+  const el = document.getElementById("balanceCiclo");
+  if(!el) return;
+  if(!ciclo.inicio){
+    el.innerHTML = '<div class="empty" style="margin-top:14px">Define el inicio del ciclo para ver el balance de actividades.</div>';
+    return;
+  }
+  const fin = sumarMeses(ciclo.inicio, 4);
+  const evs = calEventos.filter(e=>e.fecha>=ciclo.inicio && e.fecha<fin);
+  const pat = evs.filter(e=>e.ambito==="Patrulla").length;
+  const com = evs.filter(e=>e.ambito==="Compañía").length;
+  const fij = evs.filter(e=>e.tipo==="Fija").length;
+  const vari = evs.filter(e=>e.tipo==="Variable").length;
+  const t1 = pat+com, t2 = fij+vari;
+  const bar = (a,b,la,lb)=>{
+    const t = a+b; const pa = t ? Math.round(a*100/t) : 50;
+    return `<div class="balance"><div class="line"><span>${la} · ${a}</span><span>${lb} · ${b}</span></div><div class="bar"><span data-w="${pa}"></span></div></div>`;
+  };
+  const desbalance = (t1 && Math.max(pat,com)*100/t1 > 70) || (t2 && Math.max(fij,vari)*100/t2 > 70);
+  el.innerHTML = `
+    <h2>Balance del ciclo</h2>
+    <p class="sub" style="margin-bottom:4px">Del ${fechaLarga(ciclo.inicio)} al ${fechaLarga(fin)}</p>
+    ${t1 ? bar(pat,com,"Patrulla","Compañía") : '<p class="sub">Todavía no hay actividades de patrulla o compañía en este ciclo.</p>'}
+    ${t2 ? bar(fij,vari,"Fijas","Variables") : ""}
+    ${desbalance ? '<div class="alerta">Hay desequilibrio. El manual pide equilibrio entre actividades de patrulla y de compañía, y entre fijas y variables.</div>' : ""}`;
+  requestAnimationFrame(()=>{ el.querySelectorAll(".bar span").forEach(s=>{ s.style.width = s.dataset.w + "%"; }); });
+}
+
+function renderSabados(){
+  let html = "", mes = "";
+  sabados().forEach(s=>{
+    const m = mesAnio(s);
+    if(m!==mes){ html += `<h3 class="mes">${m}</h3>`; mes = m; }
+    const evs = calEventos.filter(e=>e.fecha===s);
+    const cons = esConsejo(s);
+    const dia = partes(s)[2];
+    html += `
+    <div class="sab${evs.length ? " con" : ""}">
+      <div class="dia"><b>${dia}</b><span>sáb</span></div>
+      <div class="det">
+        ${cons ? '<div class="ev"><span class="pill off">Consejo de Grupo</span><small>Solo adultos, después de actividades</small></div>' : ""}
+        ${evs.map(e=>`<div class="ev"><span class="pill ${e.ambito==="Compañía" ? "ok" : e.ambito==="Grupo" ? "warn" : ""}">${esc(e.ambito)} · ${esc(e.tipo)}</span><span>${esc(e.titulo)}${e.area ? " <small>· "+esc(e.area)+"</small>" : ""}</span><button class="link-btn" data-quitar="${esc(e.id)}">Quitar</button></div>`).join("")}
+        ${!evs.length && !cons ? '<span class="muted">Sin actividad</span>' : ""}
+      </div>
+      <button class="add" data-addfecha="${s}" aria-label="Agregar actividad el ${dia}">+</button>
+    </div>`;
+  });
+  document.getElementById("listSabados").innerHTML = html;
+}
+
+function abrirAct(fecha){
+  const f = document.getElementById("formAct");
+  f.reset();
+  f.fecha.value = fecha;
+  document.getElementById("actTitle").textContent = "Actividad del " + fechaLarga(fecha);
+  abrirSheet("sheetAct");
+}
+
+/* ---------- Navegación ---------- */
+const TITULOS = {inicio:"Inicio", bitacora:"Bitácora", actividades:"Actividades", calendario:"Calendario", fondo:"Fondo", cuotas:"Cuotas"};
+function show(view){
+  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active", v.id==="view-"+view));
+  document.querySelectorAll(".tabbar button").forEach(b=>{
+    if(b.dataset.go===view) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current");
+  });
+  document.getElementById("viewTitle").textContent = TITULOS[view] || "";
+  document.getElementById("fab").hidden = view!=="bitacora";
+  window.scrollTo({top:0, behavior:"smooth"});
+  if(view==="inicio") renderInicio();
+  if(view==="bitacora") renderBitacora();
+  if(view==="actividades") renderActividades();
+  if(view==="fondo") renderFondo();
+  if(view==="cuotas") renderCuotas();
+  if(view==="calendario") renderCalendario();
+}
+
+function abrirSheet(id){
+  document.getElementById("sheetBack").hidden = false;
+  document.getElementById(id).hidden = false;
+}
+function cerrarSheets(){
+  document.getElementById("sheetBack").hidden = true;
+  document.getElementById("sheetForm").hidden = true;
+  document.getElementById("sheetManual").hidden = true;
+  document.getElementById("sheetAct").hidden = true;
+}
+
+const form = document.getElementById("form");
+function abrirForm(g){
+  form.reset();
+  document.getElementById("formTitle").textContent = g ? "Editar guía" : "Nueva guía";
+  if(g){
+    form.nombre.value=g.nombre; form.edad.value=g.edad||""; form.etapa.value=g.etapa||"Alba";
+    form.promesa.checked=g.promesa===true; form.tema.value=g.tema||""; form.estado.value=g.estado||"sin iniciar";
+    form.monitora.value=g.monitora||""; form.inicio.value=g.inicio||""; form.nota.value=g.nota||"";
+    form.id.value=g.id;
+  } else {
+    form.id.value="";
+  }
+  abrirSheet("sheetForm");
+}
+
+document.addEventListener("click", e=>{
+  const go = e.target.closest("[data-go]");
+  if(go){ show(go.dataset.go); return; }
+
+  const edit = e.target.closest("[data-edit]");
+  if(edit){ abrirForm(guias.find(g=>g.id===edit.dataset.edit)); return; }
+
+  const etapa = e.target.closest("[data-etapa]");
+  if(etapa){
+    filtroEtapa = etapa.dataset.etapa;
+    document.querySelectorAll("#chipsEtapa .chip").forEach(c=>c.setAttribute("aria-pressed", String(c===etapa)));
+    renderBitacora();
+    return;
+  }
+
+  const fondo = e.target.closest("[data-fondo]");
+  if(fondo){ filtroFondo = fondo.dataset.fondo; renderFondo(); return; }
+
+  const cuotas = e.target.closest("[data-cuotas]");
+  if(cuotas){ modoCuotas = cuotas.dataset.cuotas; renderCuotas(); return; }
+
+  const act = e.target.closest("[data-action]");
+  if(act){
+    if(act.dataset.action==="manual"){ abrirSheet("sheetManual"); return; }
+    if(act.dataset.action==="copiar"){ copiarResumen(); return; }
+  }
+
+  const addf = e.target.closest("[data-addfecha]");
+  if(addf){ abrirAct(addf.dataset.addfecha); return; }
+  const quitar = e.target.closest("[data-quitar]");
+  if(quitar){ calEventos = calEventos.filter(x=>x.id!==quitar.dataset.quitar); guardarCal(); renderCalendario(); toast("Actividad quitada"); return; }
+  const fase = e.target.closest("[data-fase]");
+  if(fase){ ciclo.fase = Number(fase.dataset.fase); guardarCiclo(); renderCalendario(); return; }
+  if(e.target.closest("[data-close]") || e.target.id==="sheetBack"){ cerrarSheets(); return; }
+});
+
+document.getElementById("fab").addEventListener("click", ()=>abrirForm(null));
+document.getElementById("q").addEventListener("input", renderBitacora);
+document.addEventListener("input", e=>{
+  const c = e.target.dataset && e.target.dataset.ciclo;
+  if(c){ ciclo[c] = e.target.value; guardarCiclo(); renderBalance(); }
+});
+
+form.addEventListener("submit", e=>{
+  e.preventDefault();
+  const d = {
+    nombre: form.nombre.value.trim(),
+    edad: form.edad.value ? Number(form.edad.value) : null,
+    etapa: form.etapa.value,
+    promesa: form.promesa.checked,
+    tema: form.tema.value.trim(),
+    estado: form.estado.value,
+    monitora: form.monitora.value.trim(),
+    inicio: form.inicio.value,
+    nota: form.nota.value.trim()
+  };
+  if(form.id.value){
+    guias = guias.map(g=> g.id===form.id.value ? {...g, ...d} : g);
+  } else {
+    guias.push({id:"g"+Date.now(), ...d});
+  }
+  guardar();
+  cerrarSheets();
+  renderBitacora();
+  toast("Guía guardada");
+});
+
+document.getElementById("formAct").addEventListener("submit", e=>{
+  e.preventDefault();
+  const f = e.target;
+  calEventos.push({id:"c"+Date.now(), fecha:f.fecha.value, titulo:f.titulo.value.trim(), ambito:f.ambito.value, tipo:f.tipo.value, area:f.area.value.trim()});
+  guardarCal();
+  cerrarSheets();
+  renderCalendario();
+  toast("Actividad agregada");
+});
+
+async function copiarResumen(){
+  const t = totales();
+  const texto = [
+    "Resumen Compañía Alegría de Vivir",
+    `Recaudado en ventas para Jamboree: ${fmt(t.ventas)}`,
+    `Aportes de cuota: ${fmt(t.aportes)}`,
+    `Gastos de Jamboree: ${fmt(t.gastosJam)}`,
+    `Fondo de la compañía: ${sg(t.fondo)}`,
+    `Pendiente de cuotas de guías: ${fmt(t.pendGuias)}`
+  ].join("\n");
+  try{
+    await navigator.clipboard.writeText(texto);
+    toast("Resumen copiado");
+  }catch(err){
+    toast("No se pudo copiar");
+  }
+}
+
+// Restablecer lista original (sin tocar el resto)
+show("inicio");
+</script>
+</body>
+</html>
